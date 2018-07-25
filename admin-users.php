@@ -3,6 +3,24 @@
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 
+$app->get("/admin/users/:iduser/password", function($iduser){
+
+	User::verifyLogin();
+
+	$user = new User();
+
+	$user->get((int)$iduser);
+
+	$page = new PageAdmin();
+
+	$page->setTpl("users-password", array(
+		"user"=>$user->getValues(),
+		"msgError"=>User::getError(),
+		"msgSuccess"=>User::getSuccess()
+	));
+
+});
+
 $app->get("/admin/users", function() {
 
 	User::verifyLogin();
