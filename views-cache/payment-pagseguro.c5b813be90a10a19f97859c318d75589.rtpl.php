@@ -3,7 +3,7 @@
 action="https://pagseguro.uol.com.br/v2/checkout/payment.html">  
           
         <!-- Campos obrigatórios -->  
-        <input name="receiverEmail" type="hidden" value="netotadeu@outlook.com">  
+        <input name="receiverEmail" type="hidden" value="seu-email@seu-provedor.com">  
         <input name="currency" type="hidden" value="BRL">  
         
         <?php $counter1=-1;  if( isset($products) && ( is_array($products) || $products instanceof Traversable ) && sizeof($products) ) foreach( $products as $key1 => $value1 ){ $counter1++; ?>
