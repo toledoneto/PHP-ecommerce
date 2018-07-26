@@ -74,6 +74,8 @@
    
     <!-- Latest jQuery form server -->
     <script src="https://code.jquery.com/jquery.min.js"></script>
+
+    <script src="/res/site/js/handlebars-v4.0.10.js"></script>
     
     <!-- Bootstrap JS form CDN -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -102,7 +104,7 @@
                 $.each(scripts, function(index, fn){
 
                     if (typeof fn === 'function') fn();
-                    
+
                 });
 
             }
