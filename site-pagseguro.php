@@ -2,8 +2,8 @@
 
 use \Hcode\Page;
 use \Hcode\Model\User;
-use \GuzzleHttp\Client;
 use \Hcode\PagSeguro\Config;
+use \Hcode\PagSeguro\Transporter;
 use \Hcode\Model\Order;
 
 $app->get('/payment', function(){
@@ -32,19 +32,11 @@ $app->get('/payment', function(){
 		"msgError"=>Order::getError(),
 		"years"=>$years,
 		"pagseguro"=>[
-			'urlJS'=>Config::getUrlJS()
+			'urlJS'=>Config::getUrlJS(),
+			'id'=>Transporter::createSession()
 		]
 
 	]);
-
-});
-
-$app->get('/payment/pagseguro', function() {
-
-	$client = new Client();
-	$res = $client->request('POST', Config::getUrlSessions() . "?" . http_build_query(Config::getAuthentication()));
-
-	echo $res->getBody()->getContents();
 
 });
 
