@@ -343,9 +343,43 @@
                 //tratamento comum para todas chamadas
             }
        
-        });     
+        });
+
+        $("#number_field").on("change", function(){
+
+            var value  = $(this).val();
+
+            if (value.length >= 6) 
+            {
+
+                PagSeguroDirectPayment.getBrand({
+                    cardBin: value.substring(0, 6),
+                    success: function(response) {
+                        
+                        console.log(response);
+
+                    },
+                    error: function(response) {
+                        
+                        var errors = [];
+
+                        for (var code in response.errors)
+                        {
+                            errors.push(response.errors[code]);
+                        }
+
+                        showError(errors.toString());
+
+                    },
+                    complete: function(response) {
+                        //tratamento comum para todas chamadas
+                    }
+                });
+
+            }
+
+        });  
 
     });
-
 
 </script>
