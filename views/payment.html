@@ -267,16 +267,14 @@
 <script src="{$pagseguro.urlJS}"></script>
 <script type="text/javascript">PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');</script>
 
-<script type="text/javascript">
+<script>
     
     scripts.push(function(){
 
         function showError(error)
         {
-
             $("#alert-error span.msg").text(error);
             $("#alert-error").removeClass("hide");
-
         }
 
         PagSeguroDirectPayment.getPaymentMethods({
@@ -284,6 +282,8 @@
             amount: parseFloat("{$order.vltotal}"),
             success: function(response) {
                 //meios de pagamento disponíveis
+
+                //console.log(response);
                 
                 // criand Tpl para cada método de pgto
                 var tplDebit = Handlebars.compile($("#tpl-payment-debit").html());
@@ -291,9 +291,38 @@
 
                 $.each(response.paymentMethods.ONLINE_DEBIT.options, function(index, option){
 
-                    console.log(option);
+                    //colocando os Tpls nos locais corretos
+                    $("#tab-debito .contents").append(tplDebit({
+
+                        //passando os valores exigidos pelo tpl. Estão disponíveis na respostas do pagseguro
+                        value:option.name,
+                        image:option.images.MEDIUM.path,
+                        text:option.displayName
+
+                    }));
 
                 });
+
+                $.each(response.paymentMethods.CREDIT_CARD.options, function(index, option){
+
+                    //colocando os Tpls nos locais corretos
+                    $("#tab-credito .contents").append(tplCredit({
+
+                        //passando os valores exigidos pelo tpl. Estão disponíveis na respostas do pagseguro
+                        name:option.name,
+                        image:option.images.MEDIUM.path
+                    }));
+
+                });
+
+                // escondendo a animação de carregando e exibindo as opç para o user
+                $('#loading').hide();
+
+                // deixando a opç de boleto marcada por default
+                $('#tabs-methods .nav-link:first').tab('show');
+
+                // moostrando paines com formas de pgto
+                $('#payment-methods').removeClass('hide');
 
             },
             error: function(response) {
