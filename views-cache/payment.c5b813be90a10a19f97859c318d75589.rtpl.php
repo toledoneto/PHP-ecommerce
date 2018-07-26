@@ -266,3 +266,30 @@
 </script>
 <script src="<?php echo htmlspecialchars( $pagseguro["urlJS"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"></script>
 <script type="text/javascript">PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id"], ENT_COMPAT, 'UTF-8', FALSE ); ?>');</script>
+
+<script type="text/javascript">
+    
+    scripts.push(function(){
+
+        PagSeguroDirectPayment.getPaymentMethods({
+            
+            amount: parseFloat("<?php echo htmlspecialchars( $order["vltotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"),
+            success: function(response) {
+                //meios de pagamento disponíveis
+                console.log(response);
+            },
+            error: function(response) {
+                //tratamento do erro
+                console.log(response);
+            },
+            complete: function(response) {
+                //tratamento comum para todas chamadas
+                console.log(response);
+            }
+       
+        });     
+
+    });
+
+
+</script>

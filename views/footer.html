@@ -90,5 +90,24 @@
     <!-- Slider -->
     <script type="text/javascript" src="/res/site/js/bxslider.min.js"></script>
 	<script type="text/javascript" src="/res/site/js/script.slider.js"></script>
+    
+    <script>
+        
+        $(function(){
+
+            if (scripts instanceof Array) 
+            {
+
+                $.each(scripts, function(index, fn){
+
+                    if (typeof fn === 'function') fn();
+                    
+                });
+
+            }
+
+        });
+
+    </script>
   </body>
 </html>
