@@ -155,3 +155,5 @@ $app->post("/forgot/reset", function(){
 	$page->setTpl("forgot-reset-success");
 
 });
+
+ ?>

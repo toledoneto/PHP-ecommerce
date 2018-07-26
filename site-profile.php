@@ -280,3 +280,5 @@ $app->post("/profile/change-password", function(){
 	exit;
 
 });
+
+ ?>

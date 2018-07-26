@@ -125,7 +125,9 @@ $app->post("/checkout", function(){
 
 	$order->save();
 
-	header("Location: /order/".$order->getidorder());
+	$order->toSession();
+
+	header("Location: /payment");
 	exit;
 
 });
@@ -218,3 +220,5 @@ $app->get("/boleto/:idorder", function($idorder){
 	require_once($path . "layout_itau.php");
 
 });
+
+ ?>
