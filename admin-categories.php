@@ -1,23 +1,19 @@
-<?php
+<?php 
 
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 use \Hcode\Model\Category;
 use \Hcode\Model\Product;
-use \Hcode\Page;
 
-$app->get('/admin/categories', function(){
+$app->get("/admin/categories", function(){
 
 	User::verifyLogin();
 
-	$search = (isset($_GET['search'])) ? $_GET['search'] : '';
-
-	// página atual, caso não haja escolha setamos como 1
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
 	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 
-	if ($search != '') 
-	{
-		
+	if ($search != '') {
+
 		$pagination = Category::getPageSearch($search, $page);
 
 	} else {
@@ -28,9 +24,9 @@ $app->get('/admin/categories', function(){
 
 	$pages = [];
 
-	for ($x=0; $x < $pagination['pages']; $x++) 
-	{ 
-		
+	for ($x = 0; $x < $pagination['pages']; $x++)
+	{
+
 		array_push($pages, [
 			'href'=>'/admin/categories?'.http_build_query([
 				'page'=>$x+1,
@@ -43,25 +39,26 @@ $app->get('/admin/categories', function(){
 
 	$page = new PageAdmin();
 
-	$page->setTpl('categories', array(
+	$page->setTpl("categories", [
 		"categories"=>$pagination['data'],
 		"search"=>$search,
 		"pages"=>$pages
-	));
+	]);	
+
 
 });
 
-$app->get('/admin/categories/create', function(){
+$app->get("/admin/categories/create", function(){
 
 	User::verifyLogin();
 
 	$page = new PageAdmin();
 
-	$page->setTpl('categories-create');
+	$page->setTpl("categories-create");	
 
 });
 
-$app->post('/admin/categories/create', function(){
+$app->post("/admin/categories/create", function(){
 
 	User::verifyLogin();
 
@@ -71,7 +68,7 @@ $app->post('/admin/categories/create', function(){
 
 	$category->save();
 
-	header("Location: /admin/categories");
+	header('Location: /admin/categories');
 	exit;
 
 });
@@ -82,12 +79,11 @@ $app->get("/admin/categories/:idcategory/delete", function($idcategory){
 
 	$category = new Category();
 
-	// verificando se o obj ainda existe no DB
 	$category->get((int)$idcategory);
 
 	$category->delete();
 
-	header("Location: /admin/categories");
+	header('Location: /admin/categories');
 	exit;
 
 });
@@ -102,7 +98,9 @@ $app->get("/admin/categories/:idcategory", function($idcategory){
 
 	$page = new PageAdmin();
 
-	$page->setTpl('categories-update', array('category'=>$category->getValues()));
+	$page->setTpl("categories-update", [
+		'category'=>$category->getValues()
+	]);	
 
 });
 
@@ -116,9 +114,9 @@ $app->post("/admin/categories/:idcategory", function($idcategory){
 
 	$category->setData($_POST);
 
-	$category->save();
+	$category->save();	
 
-	header("Location: /admin/categories");
+	header('Location: /admin/categories');
 	exit;
 
 });
@@ -133,11 +131,11 @@ $app->get("/admin/categories/:idcategory/products", function($idcategory){
 
 	$page = new PageAdmin();
 
-	$page->setTpl("categories-products", array(
+	$page->setTpl("categories-products", [
 		'category'=>$category->getValues(),
 		'productsRelated'=>$category->getProducts(),
 		'productsNotRelated'=>$category->getProducts(false)
-	));
+	]);
 
 });
 
@@ -179,14 +177,4 @@ $app->get("/admin/categories/:idcategory/products/:idproduct/remove", function($
 
 });
 
-$app->get('/admin', function() {
-    
-	User::verifyLogin();
-
-	$page = new PageAdmin();
-
-	$page->setTpl("index");
-
-});
-
-?>
+ ?>

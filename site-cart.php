@@ -79,5 +79,3 @@ $app->post("/cart/freight", function(){
 	exit;
 
 });
-
-?>

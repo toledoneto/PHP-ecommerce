@@ -16,13 +16,10 @@
 								<div class="col-md-12">
 
 									<?php if( $msgError != '' ){ ?>
-
 									<div class="alert alert-danger">
 										<?php echo htmlspecialchars( $msgError, ENT_COMPAT, 'UTF-8', FALSE ); ?>
-
 									</div>
                                     <?php } ?>
-
                                     
                                     <div id="alert-error" class="alert alert-danger hide">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -206,10 +203,8 @@
                                                                     <select name="year" class="input-text" required="required">
                                                                         <option disabled="disabled" selected="selected" value="">Ano</option>
                                                                         <?php $counter1=-1;  if( isset($years) && ( is_array($years) || $years instanceof Traversable ) && sizeof($years) ) foreach( $years as $key1 => $value1 ){ $counter1++; ?>
-
                                                                         <option value="<?php echo htmlspecialchars( $value1, ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1, ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
                                                                         <?php } ?>
-
                                                                     </select>
                                                                 </div>
                                                             </div>

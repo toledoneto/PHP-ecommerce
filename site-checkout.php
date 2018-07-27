@@ -220,5 +220,3 @@ $app->get("/boleto/:idorder", function($idorder){
 	require_once($path . "layout_itau.php");
 
 });
-
- ?>

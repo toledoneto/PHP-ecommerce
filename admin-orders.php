@@ -88,14 +88,11 @@ $app->get("/admin/orders", function(){
 
 	User::verifyLogin();
 
-	$search = (isset($_GET['search'])) ? $_GET['search'] : '';
-
-	// página atual, caso não haja escolha setamos como 1
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
 	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 
-	if ($search != '') 
-	{
-		
+	if ($search != '') {
+
 		$pagination = Order::getPageSearch($search, $page);
 
 	} else {
@@ -106,9 +103,9 @@ $app->get("/admin/orders", function(){
 
 	$pages = [];
 
-	for ($x=0; $x < $pagination['pages']; $x++) 
-	{ 
-		
+	for ($x = 0; $x < $pagination['pages']; $x++)
+	{
+
 		array_push($pages, [
 			'href'=>'/admin/orders?'.http_build_query([
 				'page'=>$x+1,

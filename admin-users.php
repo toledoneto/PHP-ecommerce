@@ -1,47 +1,52 @@
-<?php
+<?php 
 
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 
-$app->get("/admin/users/:iduser/password", function($iduser)
-{
-	
+$app->get("/admin/users/:iduser/password", function($iduser){
+
 	User::verifyLogin();
-	
+
 	$user = new User();
-	
+
 	$user->get((int)$iduser);
+
 	$page = new PageAdmin();
 
 	$page->setTpl("users-password", [
-		'msgSuccess'=>User::getSuccess(),
-		'msgError'=>User::getError(),
-		'user'=>$user->getValues()
+		"user"=>$user->getValues(),
+		"msgError"=>User::getError(),
+		"msgSuccess"=>User::getSuccess()
 	]);
 
 });
 
-$app->post("/admin/users/:iduser/password", function($iduser)
-{
+$app->post("/admin/users/:iduser/password", function($iduser){
 
 	User::verifyLogin();
 
-	if (isset($_POST['despassword']) && $_POST['despassword']===''){
+	if (!isset($_POST['despassword']) || $_POST['despassword']==='') {
+
 		User::setError("Preencha a nova senha.");
 		header("Location: /admin/users/$iduser/password");
 		exit;
+
 	}
 
-	if (isset($_POST['despassword-confirm']) && $_POST['despassword-confirm']===''){
+	if (!isset($_POST['despassword-confirm']) || $_POST['despassword-confirm']==='') {
+
 		User::setError("Preencha a confirmação da nova senha.");
 		header("Location: /admin/users/$iduser/password");
 		exit;
+
 	}
 
-	if ($_POST['despassword'] !== $_POST['despassword-confirm']){
-		User::setError("Confirme a nova senha corretamente.");
+	if ($_POST['despassword'] !== $_POST['despassword-confirm']) {
+
+		User::setError("Confirme corretamente as senhas.");
 		header("Location: /admin/users/$iduser/password");
 		exit;
+
 	}
 
 	$user = new User();
@@ -54,20 +59,19 @@ $app->post("/admin/users/:iduser/password", function($iduser)
 
 	header("Location: /admin/users/$iduser/password");
 	exit;
+
 });
+
 
 $app->get("/admin/users", function() {
 
 	User::verifyLogin();
 
-	$search = (isset($_GET['search'])) ? $_GET['search'] : '';
-
-	// página atual, caso não haja escolha setamos como 1
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
 	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 
-	if ($search != '') 
-	{
-		
+	if ($search != '') {
+
 		$pagination = User::getPageSearch($search, $page);
 
 	} else {
@@ -78,9 +82,9 @@ $app->get("/admin/users", function() {
 
 	$pages = [];
 
-	for ($x=0; $x < $pagination['pages']; $x++) 
-	{ 
-		
+	for ($x = 0; $x < $pagination['pages']; $x++)
+	{
+
 		array_push($pages, [
 			'href'=>'/admin/users?'.http_build_query([
 				'page'=>$x+1,
@@ -150,6 +154,8 @@ $app->post("/admin/users/create", function() {
 
 	$_POST["inadmin"] = (isset($_POST["inadmin"]))?1:0;
 
+	$_POST['despassword'] = User::getPassswordHash($_POST['despassword']);
+
 	$user->setData($_POST);
 
 	$user->save();
@@ -177,4 +183,5 @@ $app->post("/admin/users/:iduser", function($iduser) {
 	exit;
 
 });
-?>
+
+ ?>

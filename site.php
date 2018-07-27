@@ -64,5 +64,3 @@ $app->get("/products/:desurl", function($desurl){
 	]);
 
 });
-
-?>

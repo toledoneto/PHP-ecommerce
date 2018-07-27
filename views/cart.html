@@ -20,11 +20,13 @@
                     <div class="woocommerce">
 
                         <form action="/checkout">
+                            
                             {if="$error != ''"}
                             <div class="alert alert-danger" role="alert">
-                            Error!
+                            {$error}
                             </div>
                             {/if}
+
                             <table cellspacing="0" class="shop_table cart">
                                 <thead>
                                     <tr>
@@ -98,7 +100,7 @@
 
                                             <tr class="shipping">
                                                 <th>Frete</th>
-                                                <td>R${function="formatPrice($cart.vlfreight)"} {if="$cart.nrdays > 0"} <small>prazo de {$cart.nrdays} dia(s)</small>{/if}</td>
+                                                <td>R${function="formatPrice($cart.vlfreight)"}{if="$cart.nrdays > 0"} <small>prazo de {$cart.nrdays} dia(s)</small>{/if}</td>
                                             </tr>
 
                                             <tr class="order-total">

@@ -1,12 +1,11 @@
-<?php
+<?php 
 
 namespace Hcode\Model;
 
 use \Hcode\DB\Sql;
 use \Hcode\Model;
 
-class Address extends Model
-{
+class Address extends Model {
 
 	const SESSION_ERROR = "AddressError";
 
@@ -17,17 +16,13 @@ class Address extends Model
 
 		$ch = curl_init();
 
-		// acessando o serviço Via Cep, que nos responde um JSON com os dados solicitados
 		curl_setopt($ch, CURLOPT_URL, "http://viacep.com.br/ws/$nrcep/json/");
-		
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // esperamos uma resposta
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // não exigimos autenticação SSL
 
-		// recebemos o JSON e seralizamos (transformar em Array) com o parâmetro true
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
 		$data = json_decode(curl_exec($ch), true);
 
-		// necessário fechar o serviço pois, do contrário, a cada novo acesso ou refresh na página
-		// o sv vai consumir mais memória, o que o faria ficar pesado
 		curl_close($ch);
 
 		return $data;
@@ -39,8 +34,7 @@ class Address extends Model
 
 		$data = Address::getCEP($nrcep);
 
-		if (isset($data['logradouro']) && $data['logradouro']) 
-		{
+		if (isset($data['logradouro']) && $data['logradouro']) {
 
 			$this->setdesaddress($data['logradouro']);
 			$this->setdescomplement($data['complemento']);
@@ -63,7 +57,7 @@ class Address extends Model
 			':idaddress'=>$this->getidaddress(),
 			':idperson'=>$this->getidperson(),
 			':desaddress'=>utf8_decode($this->getdesaddress()),
-			':desnumber'=>$this->getdesnumber(),
+			':desnumber'=>utf8_decode($this->getdesnumber()),
 			':descomplement'=>utf8_decode($this->getdescomplement()),
 			':descity'=>utf8_decode($this->getdescity()),
 			':desstate'=>utf8_decode($this->getdesstate()),

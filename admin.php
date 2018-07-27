@@ -1,7 +1,17 @@
-<?php
+<?php 
 
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
+
+$app->get('/admin', function() {
+    
+	User::verifyLogin();
+
+	$page = new PageAdmin();
+
+	$page->setTpl("index");
+
+});
 
 $app->get('/admin/login', function() {
 
@@ -32,7 +42,6 @@ $app->get('/admin/logout', function() {
 
 });
 
-// senha perdida
 $app->get("/admin/forgot", function() {
 
 	$page = new PageAdmin([
@@ -64,6 +73,7 @@ $app->get("/admin/forgot/sent", function(){
 
 });
 
+
 $app->get("/admin/forgot/reset", function(){
 
 	$user = User::validForgotDecrypt($_GET["code"]);
@@ -84,15 +94,13 @@ $app->post("/admin/forgot/reset", function(){
 
 	$forgot = User::validForgotDecrypt($_POST["code"]);	
 
-	User::setForgotUsed($forgot["idrecovery"]);
+	User::setFogotUsed($forgot["idrecovery"]);
 
 	$user = new User();
 
 	$user->get((int)$forgot["iduser"]);
 
-	$password = password_hash($_POST["password"], PASSWORD_DEFAULT, [
-		"cost"=>12
-	]);
+	$password = User::getPasswordHash($_POST["password"]);
 
 	$user->setPassword($password);
 
@@ -105,4 +113,4 @@ $app->post("/admin/forgot/reset", function(){
 
 });
 
-?>
+ ?>

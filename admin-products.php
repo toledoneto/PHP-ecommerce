@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
@@ -8,14 +8,11 @@ $app->get("/admin/products", function(){
 
 	User::verifyLogin();
 
-	$search = (isset($_GET['search'])) ? $_GET['search'] : '';
-
-	// página atual, caso não haja escolha setamos como 1
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
 	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 
-	if ($search != '') 
-	{
-		
+	if ($search != '') {
+
 		$pagination = Product::getPageSearch($search, $page);
 
 	} else {
@@ -26,9 +23,9 @@ $app->get("/admin/products", function(){
 
 	$pages = [];
 
-	for ($x=0; $x < $pagination['pages']; $x++) 
-	{ 
-		
+	for ($x = 0; $x < $pagination['pages']; $x++)
+	{
+
 		array_push($pages, [
 			'href'=>'/admin/products?'.http_build_query([
 				'page'=>$x+1,
@@ -39,13 +36,15 @@ $app->get("/admin/products", function(){
 
 	}
 
+	$products = Product::listAll();
+
 	$page = new PageAdmin();
 
-	$page->setTpl('products', array(
+	$page->setTpl("products", [
 		"products"=>$pagination['data'],
 		"search"=>$search,
 		"pages"=>$pages
-	));
+	]);
 
 });
 
@@ -55,7 +54,7 @@ $app->get("/admin/products/create", function(){
 
 	$page = new PageAdmin();
 
-	$page->setTpl('products-create');
+	$page->setTpl("products-create");
 
 });
 
@@ -84,11 +83,9 @@ $app->get("/admin/products/:idproduct", function($idproduct){
 
 	$page = new PageAdmin();
 
-	$page->setTpl('products-update', array(
-
+	$page->setTpl("products-update", [
 		'product'=>$product->getValues()
-
-	));
+	]);
 
 });
 
@@ -100,15 +97,13 @@ $app->post("/admin/products/:idproduct", function($idproduct){
 
 	$product->get((int)$idproduct);
 
-	// recebe o que for text
 	$product->setData($_POST);
 
 	$product->save();
 
-	// fazendo upload do arqv -> recebe oq é arqv
 	$product->setPhoto($_FILES["file"]);
 
-	header("Location: /admin/products");
+	header('Location: /admin/products');
 	exit;
 
 });
@@ -123,9 +118,9 @@ $app->get("/admin/products/:idproduct/delete", function($idproduct){
 
 	$product->delete();
 
-	header("Location: /admin/products");
+	header('Location: /admin/products');
 	exit;
 
 });
 
-?>
+ ?>
