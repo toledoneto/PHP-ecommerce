@@ -11,7 +11,7 @@ class CreditCard {
     
     public function __construct(
         string $token, 
-        Installment $instalmment, 
+        Installment $installment, 
         Holder $holder, 
         Address $billingAddress
         )
