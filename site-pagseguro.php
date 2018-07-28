@@ -16,6 +16,24 @@ use \Hcode\PagSeguro\CreditCard\Installment;
 use \Hcode\PagSeguro\CreditCard\Holder;
 use \Hcode\Model\Order;
 
+$app->get('/payment/success/boleto', function(){
+    
+    User::verifyLogin(false);
+
+    $order = new Order();
+
+    $order->getFromSession();
+
+    $order->get((int)$order->getidorder());
+
+    $page = new Page();
+
+    $page->setTpl('payment-success-boleto', [
+        'order'=>$order->getValues()
+    ]);
+
+});
+    
 $app->get('/payment/success', function(){
 
     User::verifyLogin(false);
@@ -29,7 +47,68 @@ $app->get('/payment/success', function(){
     $page->setTpl('payment-success', [
         'order'=>$order->getValues()
     ]);
+
+});
+
+$app->post('/payment/boleto', function(){
+
+    User::verifyLogin(false);
+
+    $order = new Order();
+
+    $order->getFromSession();
+
+    $order->get((int)$order->getidorder());
+
+    $address = $order->getAddress();
+
+    $cart = $order->getCart();
+
+    $cpf = new Document(Document::CPF, $_POST['cpf']);
+
+    $phone = new Phone($_POST['ddd'], $_POST['phone']);
+
+    $shippingAddress = new Address(
+        $address->getdesaddress(),
+        $address->getdesnumber(),
+        $address->getdescomplement(),       
+        $address->getdesdistrict(),
+        $address->getdeszipcode(),
+        $address->getdescity(),
+        $address->getdesstate(),
+        $address->getdescountry()
+    );
+
+    $birthDate = new DateTime($_POST['birth']);
+
+    $sender = new Sender($order->getdesperson(), $cpf, $birthDate, $phone, $order->getdesemail(), $_POST['hash']);
+
+    $shipping = new Shipping($shippingAddress, (float)$cart->getvlfreight(), Shipping::PAC);
+
+    $payment = new Payment($order->getidorder(), $sender, $shipping);
+
+    foreach($cart->getProducts() as $product)
+    {
+
+        $item = new Item(
+            (int)$product['idproduct'],
+            $product['desproduct'],
+            (float)$product['vlprice'],
+            (int)$product['nrqtd']
+        );
+
+        $payment->addItem($item);
+
+    }
+
+    $payment->setBoleto();
+
+    Transporter::sendTransaction($payment);
     
+    echo json_encode([
+        'success'=>true
+    ]);
+
 });
 
 $app->post('/payment/credit', function(){
@@ -46,11 +125,10 @@ $app->post('/payment/credit', function(){
 
     $cart = $order->getCart();
 
-    // TESTANDO AS CLASSES CRIADAS PARA USAR COM PAYMENT.PHP
     $cpf = new Document(Document::CPF, $_POST['cpf']);
-    
+
     $phone = new Phone($_POST['ddd'], $_POST['phone']);
-    
+
     $shippingAddress = new Address(
         $address->getdesaddress(),
         $address->getdesnumber(),
@@ -89,7 +167,7 @@ $app->post('/payment/credit', function(){
 
     foreach($cart->getProducts() as $product)
     {
-        
+
         $item = new Item(
             (int)$product['idproduct'],
             $product['desproduct'],
@@ -98,21 +176,9 @@ $app->post('/payment/credit', function(){
         );
 
         $payment->addItem($item);
+
     }
-    
-    /*//PARA TESTES ANTERIORES AO PAYMENT
-    $dom = new DOMDocument();
 
-    $test = $payment->getDOMElement();
-
-    $testNode = $dom->importNode($test, true);
-
-    $dom->appendChild($testNode);
-
-    echo $dom->saveXml();
-    //FIM DOS TESTES ANTERIORES AO PAYMENT*/
-
-    
     $payment->setCreditCard($creditCard);
 
     Transporter::sendTransaction($payment);
@@ -120,9 +186,7 @@ $app->post('/payment/credit', function(){
     echo json_encode([
         'success'=>true
     ]);
-    
-    // echo $dom->saveXml();
-    // FIM DOS TESTES PARA PAYMENT.PHP
+
 });
 
 $app->get('/payment', function(){
@@ -155,3 +219,5 @@ $app->get('/payment', function(){
     ]);
 
 });
+
+?>
