@@ -2,6 +2,11 @@
 
 namespace Hcode\PagSeguro;
 
+use Exception;
+use DOMDocument;
+use DOMElement;
+use DateTime;
+
 class Sender {
 
     private $name;
@@ -73,7 +78,7 @@ class Sender {
         $documents = $sender->appendChild($documents);
 
         $cpf = $this->cpf->getDOMElement();
-        $cpf = $dom->importNode($cpf, true); // true tbm importa os nós filhos
+        $cpf = $dom->importNode($cpf, true);
         $cpf = $documents->appendChild($cpf);
 
         $phone = $this->phone->getDOMElement();
@@ -91,5 +96,3 @@ class Sender {
     }
 
 }
-
-?>

@@ -2,6 +2,10 @@
 
 namespace Hcode\PagSeguro\CreditCard;
 
+use Exception;
+use DOMDocument;
+use DOMElement;
+use Hcode\PagSeguro\Config;
 
 // classe do número de parcelas
 class Installment {
