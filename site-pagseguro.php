@@ -101,9 +101,9 @@ $app->post('/payment/credit', function(){
 
     Transporter::sendTransaction($payment);
     
-    // echo json_encode([
-    //     'success'=>true
-    // ]);
+    echo json_encode([
+        'success'=>true
+    ]);
     
     // echo $dom->saveXml();
     // FIM DOS TESTES PARA PAYMENT.PHP

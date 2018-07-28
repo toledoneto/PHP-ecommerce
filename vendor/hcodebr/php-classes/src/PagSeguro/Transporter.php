@@ -37,23 +37,21 @@ class Transporter {
 
         $xml = simplexml_load_string($res->getBody()->getContents());
 
-        var_dump($xml);
+        $order = new Order();
 
-        // $order = new Order();
-
-        // $order->get((int)$xml->reference);
+        $order->get((int)$xml->reference);
                 
-        // $order->setPagSeguroTransactionRespose(
-        //     (string)$xml->code,
-        //     (float)$xml->grossAmount,
-        //     (float)$xml->disccountAmount,
-        //     (float)$xml->feeAmount,
-        //     (float)$xml->netAmount,
-        //     (float)$xml->extraAmount,
-        //     (string)$xml->paymentLink
-        // );
+        $order->setPagSeguroTransactionRespose(
+            (string)$xml->code,
+            (float)$xml->grossAmount,
+            (float)$xml->disccountAmount,
+            (float)$xml->feeAmount,
+            (float)$xml->netAmount,
+            (float)$xml->extraAmount,
+            (string)$xml->paymentLink
+        );
 
-        // return $xml;
+        return $xml;
 
     }
 
