@@ -97,28 +97,28 @@ class Address {
         $address = $dom->createElement($node);
         $address = $dom->appendChild($address);
 
-        $street = $dom->createElement("street", $this->street);
+        $street = $dom->createElement("street", utf8_encode($this->street));
         $street = $address->appendChild($street);
 
-        $number = $dom->createElement("number", $this->number);
+        $number = $dom->createElement("number", utf8_encode($this->number));
         $number = $address->appendChild($number);
 
-        $complement = $dom->createElement("complement", $this->complement);
+        $complement = $dom->createElement("complement", utf8_encode($this->complement));
         $complement = $address->appendChild($complement);
 
-        $district = $dom->createElement("district", $this->district);
+        $district = $dom->createElement("district", utf8_encode($this->district));
         $district = $address->appendChild($district);
 
         $city = $dom->createElement("city", utf8_encode($this->city));
         $city = $address->appendChild($city);
 
-        $state = $dom->createElement("state", $this->state);
+        $state = $dom->createElement("state", utf8_encode($this->state));
         $state = $address->appendChild($state);
 
-        $country = $dom->createElement("country", $this->country);
+        $country = $dom->createElement("country", utf8_encode($this->country));
         $country = $address->appendChild($country);
 
-        $postalCode = $dom->createElement("postalCode", $this->postalCode);
+        $postalCode = $dom->createElement("postalCode", utf8_encode($this->postalCode));
         $postalCode = $address->appendChild($postalCode);
 
         return $address;

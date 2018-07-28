@@ -99,9 +99,13 @@ $app->post('/payment/credit', function(){
     
     $payment->setCreditCard($creditCard);
 
-    $dom = $payment->getDOMDocument();
+    Transporter::sendTransaction($payment);
     
-    echo $dom->saveXml();
+    // echo json_encode([
+    //     'success'=>true
+    // ]);
+    
+    // echo $dom->saveXml();
     // FIM DOS TESTES PARA PAYMENT.PHP
 });
 
