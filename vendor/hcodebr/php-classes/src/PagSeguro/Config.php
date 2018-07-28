@@ -6,11 +6,11 @@ class Config {
 
     const SANDBOX = true;
 
-    const SANDBOX_EMAIL = "netotadeu@outlook.com";
-    const PRODUCTION_EMAIL = "netotadeu@outlook.com";
+    const SANDBOX_EMAIL = "seuemail@seudominio.com";
+    const PRODUCTION_EMAIL = "seuemail@seudominio.com";
 
     const SANDBOX_TOKEN = "9B600A4D62044AB28A0C992589BF8E94";
-    const PRODUCTION_TOKEN = "A31AE2DF6C9A4CE69CF704FCE2658736";
+    const PRODUCTION_TOKEN = "seutoken";
 
     const SANDBOX_SESSIONS = "https://ws.sandbox.pagseguro.uol.com.br/v2/sessions";
     const PRODUCTION_SESSIONS = "https://ws.pagseguro.uol.com.br/v2/sessions";
