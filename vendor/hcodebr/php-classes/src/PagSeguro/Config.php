@@ -21,6 +21,9 @@ class Config {
     const MAX_INSTALLMENT_NO_INTEREST = 10;
     const MAX_INSTALLMENT = 10;
 
+    // url de resposta para aguardar o status do pgto vindo do PagSeguro
+    const NOTIFICATION_URL = "http://www.html5dev.com.br/payment/notification";
+
     public static function getAuthentication():array
     {
 

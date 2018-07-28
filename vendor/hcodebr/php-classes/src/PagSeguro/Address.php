@@ -89,7 +89,7 @@ class Address {
 
     }
 
-    public function getDOMElement($node = "addreess"):DOMElement
+    public function getDOMElement($node = "address"):DOMElement
     {
 
         $dom = new DOMDocument();
