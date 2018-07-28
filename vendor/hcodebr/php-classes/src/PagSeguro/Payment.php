@@ -8,76 +8,76 @@ use DOMElement;
 use Hcode\PagSeguro\Payment\Method;
 use Hcode\PagSeguro\Config;
 
-class Payment
-{
+class Payment {
 
-	private $mode = "default";
-	private $currency = "BRL";
-	private $extraAmount = 0; // descontos ou acréscimos no valor
-	private $reference = "";
-	private $items = [];
-	private $sender;
-	private $shipping;
-	private $method;
-	private $creditCard;
-	private $bank;
+    private $mode = "default";
+    private $currency = "BRL";
+    private $extraAmount = 0;
+    private $reference = "";
+    private $items = [];
+    private $sender;
+    private $shipping;
+    private $method;
+    private $creditCard;
+    private $bank;
 
-	public function __construct(
-		string $reference,
-		Sender $sender,
-		Shipping $shipping,
-		float $extraAmount = 0
-	)
-	{
-
-		$this->sender = $sender;
-		$this->shipping = $shipping;
-		$this->reference = $reference;
-		$this->extraAmount = number_format($extraAmount, 2, '.', '');
-
-	}
-
-	public function addItem(Item $item)
+    public function __construct(
+        string $reference,
+        Sender $sender,
+        Shipping $shipping,
+        float $extraAmount = 0
+    )
     {
-        array_push($this->items, $item);
+
+        $this->sender = $sender;
+        $this->shipping = $shipping;
+        $this->reference = $reference;
+        $this->extraAmount = number_format($extraAmount, 2, ".", "");
+
     }
 
-    // método de pgto em CC
+    public function addItem(Item $item)
+    {
+
+        array_push($this->items, $item);
+
+    }
+
     public function setCreditCard(CreditCard $creditCard)
     {
+
         $this->creditCard = $creditCard;
         $this->method = Method::CREDIT_CARD;
+
     }
-    
-    // método de pgto em Débito bancário
+
     public function setBank(Bank $bank)
     {
+
         $this->bank = $bank;
         $this->method = Method::DEBIT;
+
     }
 
-    // método de pgto em Boleto
     public function setBoleto()
     {
+
         $this->method = Method::BOLETO;
+
     }
 
-	public function getDOMDocument():DOMDocument
-	{
+    public function getDOMDocument():DOMDocument
+    {
 
-		$dom = new DOMDocument('1.0', 'ISO-8859-1');
+        $dom = new DOMDocument("1.0", "ISO-8859-1");
 
-		// criando o DOM completo para envio ao PagSeguro
+        $payment = $dom->createElement("payment");
+        $payment = $dom->appendChild($payment);
 
-		// criando o primeiro nó: payment
-		$payment = $dom->createElement('payment');
-		$payment = $dom->appendChild($payment);
+        $mode = $dom->createElement("mode", $this->mode);
+        $mode = $payment->appendChild($mode);
 
-		// criando os seguintes nós
-		$mode = $dom->createElement('mode', $this->mode);
-		$mode = $payment->appendChild($mode);
-
-		$currency = $dom->createElement("currency", $this->currency);
+        $currency = $dom->createElement("currency", $this->currency);
         $currency = $payment->appendChild($currency);
 
         $notificationUrl = $dom->createElement("notificationURL", Config::NOTIFICATION_URL);
@@ -95,9 +95,11 @@ class Payment
 
         foreach($this->items as $_item)
         {
+
             $item = $_item->getDOMElement();
             $item = $dom->importNode($item, true);
             $item = $items->appendChild($item);
+
         }
 
         $reference = $dom->createElement("reference", $this->reference);
@@ -115,6 +117,7 @@ class Payment
 
         switch ($this->method)
         {
+
             case Method::CREDIT_CARD:
             
             $creditCard = $this->creditCard->getDOMElement();
@@ -122,17 +125,20 @@ class Payment
             $creditCard = $payment->appendChild($creditCard);
             
             break;
+
             case Method::DEBIT:
+
             $bank = $this->bank->getDOMElement();
             $bank = $dom->importNode($bank, true);
             $bank = $payment->appendChild($bank);
     
             break;
+
         }
 
-		return $dom;
+        return $dom;
 
-	}
+    }
 
 }
 

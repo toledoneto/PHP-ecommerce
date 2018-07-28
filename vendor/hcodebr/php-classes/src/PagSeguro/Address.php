@@ -109,7 +109,7 @@ class Address {
         $district = $dom->createElement("district", $this->district);
         $district = $address->appendChild($district);
 
-        $city = $dom->createElement("city", $this->city);
+        $city = $dom->createElement("city", utf8_encode($this->city));
         $city = $address->appendChild($city);
 
         $state = $dom->createElement("state", $this->state);
